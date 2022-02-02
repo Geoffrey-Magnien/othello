@@ -1,0 +1,10 @@
+
+config.o
+CUnit-Memory-Dump.xml
+executable
+libhello.so
+log.org
+othello
+othello.o
+player.o
+test_unit
