@@ -93,7 +93,7 @@ status_t othello_game_run(config_t* config,player_t playerB, player_t playerW, i
 	 */
     }
     if(fin_de_partie == false){
-        erreur_fin_partie == true;
+        erreur_fin_partie = true;
     }
     return status;
 }
@@ -153,7 +153,7 @@ void passe_tour(void){    /* les 2 joueurs sont des robots*/
     config_t gamea;
     config_init(&gamea, 8);
     /* lancement du jeu*/
-    status_t statusa = othello_game_run(&gamea, playerBa, playerWa, 2, 1);
+    othello_game_run(&gamea, playerBa, playerWa, 2, 1);
     CU_ASSERT(passe);
 }
 
