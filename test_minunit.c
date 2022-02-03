@@ -16,6 +16,7 @@
 //gcc -Wall -std=c11 -c -o player.o player.c
 //gcc -Wall -std=c11 -c -o test_minunit.o test_minunit.c
 //gcc -Wall -std=c11 -o test_minunit config.o player.o test_minunit.o
+//.\test_minunit
 
 //#####################################################################################################################
 //#
@@ -146,7 +147,7 @@ int victory_percent(int robotType) {
     /* initialisation de la configuration du jeu */
     config_t game;
     status_t status;
-    for (int loop = 0; loop < 1000; loop++){
+    for (int loop = 0; loop < 500; loop++){
         config_init(&game, 8);
         /* lancement du jeu*/
         status = othello_game_run(&game, playerB, playerW, robotType, 6);
@@ -154,7 +155,7 @@ int victory_percent(int robotType) {
             count += 1;
         }
     }
-    return(count/10);
+    return(count/5);
 }
 
 //#####################################################################################################################
@@ -262,7 +263,7 @@ MU_TEST_SUITE(test_suite) {
     MU_RUN_TEST(VictoryRate_Surpuissant);
     
     //exigence 9
-//    MU_RUN_TEST(VictoryRate_SurpuissantV2);
+    MU_RUN_TEST(VictoryRate_SurpuissantV2);
 
     //exigence 10
     MU_RUN_TEST(testOptVsMin);
