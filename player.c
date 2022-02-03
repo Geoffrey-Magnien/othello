@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "player.h"
-#include <time.h>
+//#include <time.h>
 
 /* Fonctions coups */
 
