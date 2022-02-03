@@ -216,14 +216,6 @@ MU_TEST(testOptVsMin) {
 	mu_check( (othello_ending(&game, status)) == 1 );
 }
 
-MU_TEST(view) {
-    printf("\nopt(1) : %d, %d, %d, %d, %d \n",victory_percent(1));
-    printf("\ncorner(2) : %d, %d, %d, %d, %d \n",victory_percent(2));
-    printf("\nMinscore(3) : %d, %d, %d, %d, %d \n",victory_percent(3));
-    printf("\nSurpuissant(4) : %d, %d, %d, %d, %d \n",victory_percent(4));
-    printf("\nsurpV2(5) : %d \n",victory_percent(5));
-	mu_check(1==2);
-}
 
 //#####################################################################################################################
 //#
@@ -259,14 +251,16 @@ MU_TEST_SUITE(test_suite) {
 
     //exigence 10
     MU_RUN_TEST(testOptVsMin);
-
-
-    MU_RUN_TEST(view);
 }
 
 int main(int argc, char *argv[]) {
     srand(time(NULL));
 	MU_RUN_SUITE(test_suite);
 	MU_REPORT();
+    printf("\nopt(1) : %d \n",victory_percent(1));
+    printf("\ncorner(2) : %d \n",victory_percent(2));
+    printf("\nMinscore(3) : %d \n",victory_percent(3));
+    printf("\nSurpuissant(4) : %d \n",victory_percent(4));
+    printf("\nsurpV2(5) : %d \n",victory_percent(5));
 	return MU_EXIT_CODE;
 }
