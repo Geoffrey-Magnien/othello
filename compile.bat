@@ -13,4 +13,4 @@ C:\MinGW\bin\gcc -Wall -LC:\.libs -IC:Headers -o max_test max_test.c max.o -lcun
 
 gcc -Wall -std=c11 -c -o config.o config.c 
 gcc -Wall -std=c11 -c -o player.o player.c 
-gcc -Wall -LD:\INSTALLER\CUnit-2.1-3\CUnit\Sources\.libs -ID:\INSTALLER\CUnit-2.1-3\CUnit\Headers -o test_unite test_unit.c player.o config.o -lcunit
+gcc -Wall -ID:\INSTALLER\CUnit-2.1-3\CUnit\Headers -LD:\INSTALLER\CUnit-2.1-3\CUnit\Sources\.libs -o test_unite test_unit.c player.o config.o -lcunit

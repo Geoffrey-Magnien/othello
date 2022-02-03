@@ -8,3 +8,4 @@ othello
 othello.o
 player.o
 test_unit
+compile.bat
