@@ -9,6 +9,7 @@
 #include "player.h"
 #include <unistd.h>
 
+#include "TestRun.h"
 #include "CUnit.h"
 #include "Basic.h"
 //#include "CUnit/Automated.h"
