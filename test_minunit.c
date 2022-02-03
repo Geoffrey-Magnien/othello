@@ -184,31 +184,31 @@ MU_TEST(validation_coup) {
 
 MU_TEST(VictoryRate_Opt) {
     int rate = victory_percent(1);
-    printf("\nopt(1) : %d \n",rate);
+//    printf("\nopt(1) : %d \n",rate);
 	mu_check(rate > 99);
 }
 
 MU_TEST(VictoryRate_Corner) {
     int rate = victory_percent(2);
-    printf("\ncorner(2) : %d \n",rate);
+//    printf("\ncorner(2) : %d \n",rate);
 	mu_check(rate > 99);
 }
 
 MU_TEST(VictoryRate_Minscore) {
     int rate = victory_percent(3);
-    printf("\nMinscore(3) : %d \n",rate);
+//    printf("\nMinscore(3) : %d \n",rate);
 	mu_check(rate > 99);
 }
 
 MU_TEST(VictoryRate_Surpuissant) {
     int rate = victory_percent(4);
-    printf("\nSurpuissant(4) : %d \n",rate);
+//    printf("\nSurpuissant(4) : %d \n",rate);
 	mu_check(rate > 99);
 }
 
 MU_TEST(VictoryRate_SurpuissantV2) {
     int rate = victory_percent(5);
-    printf("\nsurpV2(5) : %d \n",rate);
+//    printf("\nsurpV2(5) : %d \n",rate);
 	mu_check(rate> 99);
 }
 
@@ -237,6 +237,7 @@ MU_TEST(testOptVsMin) {
 //###################################### La suite d'execution des tests ###############################################
 
 MU_TEST_SUITE(test_suite) {
+    srand(time(NULL));
     /* add the tests to the suite */
 
     //exigence 1
@@ -268,7 +269,6 @@ MU_TEST_SUITE(test_suite) {
 }
 
 int main(int argc, char *argv[]) {
-    srand(time(NULL));
 	MU_RUN_SUITE(test_suite);
 	MU_REPORT();
 	return MU_EXIT_CODE;
