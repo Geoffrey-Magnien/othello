@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "player.h"
+#include <time.h>
 
 /* Fonctions coups */
 
@@ -507,7 +508,7 @@ move_t play_robot_corner(config_t* game, move_kind_t m) {
 
     config_t* copy= config_copy(game);
     mettre_les_suggestions(copy,m);
-          
+
     int distance = distance_bordure(size/2,size/2,size);
 
     int linbest = size/2;
@@ -540,6 +541,51 @@ move_t play_robot_corner(config_t* game, move_kind_t m) {
     //move_print(&result);
     return result;
 }
+
+/**
+ * Interface joueur robot
+ * tactique: tente de se rapprocher le plus possible des coins
+ * @param config   situation du jeu
+ * @param m        qui doit jouer
+ * @return         le coup joue
+ * ROBOT Numero 2
+ */
+
+move_t play_robot_rand(config_t* game, move_kind_t m) {
+    move_t result = move_init(m);
+    move_kind_t pass = (m == MOVE_PLAY_BLACK) ? MOVE_PASS_BLACK : MOVE_PASS_WHITE;
+    size_t size = game->board_size;
+
+    config_t* copy= config_copy(game);
+    mettre_les_suggestions(copy,m);
+    int r;
+    int rmax = 0;
+
+    for (int i=0; i<size; i++ ) {
+        for (int j=0; j<size; j++ ) {
+            cell_t cellule = board_get(copy->board,size,i,j);
+            if (cellule==CELL_SUG) {
+                r = rand() % 200 + 1; // Returns a pseudo-random integer
+                printf("r = %d",r);
+                if (rmax < r) {
+                    printf("   i:%d,  j:%d,  rmax:%d",i,j,rmax); 
+                    rmax = r;
+                    result.lin = i;
+                    result.col = j;
+                }
+            }
+        }
+    }
+    config_free(copy);
+    if (rmax == 0) {
+        result.kind = pass;
+        //move_print(&result);    
+        return move_init(pass);
+    }
+    //move_print(&result);
+    return result;
+}
+
 
 bool case_interdite(int i,int j,size_t size) {
     if ( (i==1 && j==1)
@@ -1901,6 +1947,10 @@ move_t play_black(config_t* game, player_t pB, int numero) {
         {
             return play_robot_surpuissant_V2(game, MOVE_PLAY_BLACK);
         }
+        case 6:
+        {
+            return play_robot_rand(game, MOVE_PLAY_BLACK);
+        }
         default:
             return play_robot_opt(game, MOVE_PLAY_BLACK);
         }
@@ -1938,6 +1988,10 @@ move_t play_white(config_t* game, player_t pW, int numero) {
         case 5:
         {
             return play_robot_surpuissant_V2(game, MOVE_PLAY_WHITE);
+        }
+        case 6:
+        {
+            return play_robot_rand(game, MOVE_PLAY_WHITE);
         }
         default:
             return play_robot_opt(game, MOVE_PLAY_WHITE);

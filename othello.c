@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include "othello.h"
 #include <unistd.h>
-
+#include <time.h>
 
 /** Fonctions */
 
@@ -173,7 +173,8 @@ int main(int argc, char* argv[]) {
     config_t game;
     config_init(&game, size);
     /* lancement du jeu */
-    status_t status = othello_game_run(&game, playerB, playerW, 3, 5);
+    srand(time(NULL));
+    status_t status = othello_game_run(&game, playerB, playerW, 3, 6);
 
     /* affichage fin */
     othello_end(&game, status);

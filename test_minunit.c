@@ -9,9 +9,9 @@
 #include "player.h"
 #include <unistd.h>
 #include "minunit.h"
+#include <time.h>
 
 //execution :
-//gcc test_minunit.c -lrt -lm -o minunit
 //gcc -Wall -std=c11 -c -o config.o config.c
 //gcc -Wall -std=c11 -c -o player.o player.c
 //gcc -Wall -std=c11 -c -o test_minunit.o test_minunit.c
@@ -138,15 +138,29 @@ int othello_ending(config_t* game, status_t status) {
     }
 }
 
+int victory_percent(int robotType) {
+    int count = 0;
+    player_t playerB = PLAYER_ROBOT;
+    player_t playerW = PLAYER_ROBOT;
+
+    /* initialisation de la configuration du jeu */
+    config_t game;
+    status_t status;
+    for (int loop = 0; loop < 100; loop++){
+        config_init(&game, 8);
+        /* lancement du jeu*/
+        status = othello_game_run(&game, playerB, playerW, robotType, 6);
+	    if((othello_ending(&game, status)) == 1){
+            count += 1;
+        }
+    }
+    return(count);
+}
 
 //#####################################################################################################################
 //#
 //#
 //###################################### Fonctions de test unitaires ##################################################
-
-MU_TEST(test_check) {
-	mu_check(5 == 7);
-}
 
 MU_TEST(fin_partie) {
 	mu_check(!erreur_fin_partie);
@@ -167,6 +181,28 @@ MU_TEST(passe_tour) {
 MU_TEST(validation_coup) {
 	mu_check(coup_valide);
 }
+
+MU_TEST(VictoryRate_Opt) {
+    printf("\nopt(1) : %d, %d, %d, %d, %d \n",victory_percent(1),victory_percent(1),victory_percent(1),victory_percent(1),victory_percent(1));
+	mu_check(victory_percent(1) > 70);
+}
+MU_TEST(VictoryRate_Corner) {
+    printf("\ncorner(2) : %d, %d, %d, %d, %d \n",victory_percent(2),victory_percent(2),victory_percent(2),victory_percent(2),victory_percent(2));
+	mu_check(victory_percent(2) > 70);
+}
+MU_TEST(VictoryRate_Minscore) {
+    printf("\nMinscore(3) : %d, %d, %d, %d, %d \n",victory_percent(3),victory_percent(3),victory_percent(3),victory_percent(3),victory_percent(3));
+	mu_check(victory_percent(3) > 70);
+}
+MU_TEST(VictoryRate_Surpuissant) {
+    printf("\nSurpuissant(4) : %d, %d, %d, %d, %d \n",victory_percent(4),victory_percent(4),victory_percent(4),victory_percent(4),victory_percent(4));
+	mu_check(victory_percent(4) > 70);
+}
+MU_TEST(VictoryRate_SurpuissantV2) {
+    printf("\nsurpV2(5) : %d, %d, %d, %d, %d \n",victory_percent(5),victory_percent(5),victory_percent(5),victory_percent(5),victory_percent(5));
+	mu_check(victory_percent(5) > 70);
+}
+
 MU_TEST(testOptVsMin) {
     /* les 2 joueurs sont des robots*/
     player_t playerB = PLAYER_ROBOT;
@@ -177,14 +213,13 @@ MU_TEST(testOptVsMin) {
     config_init(&game, 8);
     /* lancement du jeu*/
     status_t status = othello_game_run(&game, playerB, playerW, 1, 3);
-	mu_check( (othello_ending(&game, status)) == 1 );
+	mu_check( (othello_ending(&game, status)) == 2 );
 
     config_init(&game, 8);
     /* lancement du jeu */
     status = othello_game_run(&game, playerB, playerW, 3, 1);
 	mu_check( (othello_ending(&game, status)) == 1 );
 }
-
 
 //#####################################################################################################################
 //#
@@ -193,7 +228,6 @@ MU_TEST(testOptVsMin) {
 
 MU_TEST_SUITE(test_suite) {
     /* add the tests to the suite */
-	MU_RUN_TEST(test_check);
 
     //exigence 1
     MU_RUN_TEST(fin_partie);
@@ -204,11 +238,27 @@ MU_TEST_SUITE(test_suite) {
     //exigence 3
     MU_RUN_TEST(validation_coup);
 
-    //exigence ?
+    //exigence 5
+    MU_RUN_TEST(VictoryRate_Opt);
+    
+    //exigence 6
+    MU_RUN_TEST(VictoryRate_Corner);
+
+    //exigence 7
+    MU_RUN_TEST(VictoryRate_Minscore);
+    
+    //exigence 8
+    MU_RUN_TEST(VictoryRate_Surpuissant);
+    
+    //exigence 9
+    MU_RUN_TEST(VictoryRate_SurpuissantV2);
+
+    //exigence 10
     MU_RUN_TEST(testOptVsMin);
 }
 
 int main(int argc, char *argv[]) {
+    srand(time(NULL));
 	MU_RUN_SUITE(test_suite);
 	MU_REPORT();
 	return MU_EXIT_CODE;
