@@ -254,9 +254,7 @@ MU_TEST_SUITE(test_suite) {
     
     //exigence 6
     MU_RUN_TEST(VictoryRate_Corner);
-}
 
-MU_TEST_SUITE(test_suite2) {
     //exigence 7
     MU_RUN_TEST(VictoryRate_Minscore);
     
@@ -264,7 +262,7 @@ MU_TEST_SUITE(test_suite2) {
     MU_RUN_TEST(VictoryRate_Surpuissant);
     
     //exigence 9
-    MU_RUN_TEST(VictoryRate_SurpuissantV2);
+//    MU_RUN_TEST(VictoryRate_SurpuissantV2);
 
     //exigence 10
     MU_RUN_TEST(testOptVsMin);
@@ -273,7 +271,5 @@ MU_TEST_SUITE(test_suite2) {
 int main(int argc, char *argv[]) {
 	MU_RUN_SUITE(test_suite);
     MU_REPORT();
-    MU_RUN_SUITE(test_suite2);
-	MU_REPORT();
 	return MU_EXIT_CODE;
 }
