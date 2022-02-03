@@ -146,7 +146,7 @@ int victory_percent(int robotType) {
     /* initialisation de la configuration du jeu */
     config_t game;
     status_t status;
-    for (int loop = 0; loop < 100; loop++){
+    for (int loop = 0; loop < 1000; loop++){
         config_init(&game, 8);
         /* lancement du jeu*/
         status = othello_game_run(&game, playerB, playerW, robotType, 6);
@@ -154,7 +154,7 @@ int victory_percent(int robotType) {
             count += 1;
         }
     }
-    return(count);
+    return(count/10);
 }
 
 //#####################################################################################################################
@@ -183,24 +183,19 @@ MU_TEST(validation_coup) {
 }
 
 MU_TEST(VictoryRate_Opt) {
-    printf("\nopt(1) : %d, %d, %d, %d, %d \n",victory_percent(1),victory_percent(1),victory_percent(1),victory_percent(1),victory_percent(1));
 	mu_check(victory_percent(1) > 70);
 }
 MU_TEST(VictoryRate_Corner) {
-    printf("\ncorner(2) : %d, %d, %d, %d, %d \n",victory_percent(2),victory_percent(2),victory_percent(2),victory_percent(2),victory_percent(2));
 	mu_check(victory_percent(2) > 70);
 }
 MU_TEST(VictoryRate_Minscore) {
-    printf("\nMinscore(3) : %d, %d, %d, %d, %d \n",victory_percent(3),victory_percent(3),victory_percent(3),victory_percent(3),victory_percent(3));
-	mu_check(victory_percent(3) > 70);
+	mu_check(victory_percent(3) > 90);
 }
 MU_TEST(VictoryRate_Surpuissant) {
-    printf("\nSurpuissant(4) : %d, %d, %d, %d, %d \n",victory_percent(4),victory_percent(4),victory_percent(4),victory_percent(4),victory_percent(4));
-	mu_check(victory_percent(4) > 70);
+	mu_check(victory_percent(4) > 90);
 }
 MU_TEST(VictoryRate_SurpuissantV2) {
-    printf("\nsurpV2(5) : %d, %d, %d, %d, %d \n",victory_percent(5),victory_percent(5),victory_percent(5),victory_percent(5),victory_percent(5));
-	mu_check(victory_percent(5) > 70);
+	mu_check(victory_percent(5) > 90);
 }
 
 MU_TEST(testOptVsMin) {
@@ -219,6 +214,15 @@ MU_TEST(testOptVsMin) {
     /* lancement du jeu */
     status = othello_game_run(&game, playerB, playerW, 3, 1);
 	mu_check( (othello_ending(&game, status)) == 1 );
+}
+
+MU_TEST(view) {
+    printf("\nopt(1) : %d, %d, %d, %d, %d \n",victory_percent(1));
+    printf("\ncorner(2) : %d, %d, %d, %d, %d \n",victory_percent(2));
+    printf("\nMinscore(3) : %d, %d, %d, %d, %d \n",victory_percent(3));
+    printf("\nSurpuissant(4) : %d, %d, %d, %d, %d \n",victory_percent(4));
+    printf("\nsurpV2(5) : %d \n",victory_percent(5));
+	mu_check(1==2);
 }
 
 //#####################################################################################################################
