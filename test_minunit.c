@@ -259,6 +259,9 @@ MU_TEST_SUITE(test_suite) {
 
     //exigence 10
     MU_RUN_TEST(testOptVsMin);
+
+
+    MU_RUN_TEST(view);
 }
 
 int main(int argc, char *argv[]) {
