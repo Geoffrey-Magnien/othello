@@ -566,9 +566,7 @@ move_t play_robot_rand(config_t* game, move_kind_t m) {
             cell_t cellule = board_get(copy->board,size,i,j);
             if (cellule==CELL_SUG) {
                 r = rand() % 200 + 1; // Returns a pseudo-random integer
-                printf("r = %d",r);
                 if (rmax < r) {
-                    printf("   i:%d,  j:%d,  rmax:%d",i,j,rmax); 
                     rmax = r;
                     result.lin = i;
                     result.col = j;
