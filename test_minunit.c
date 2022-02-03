@@ -8,8 +8,8 @@
 #include <stdbool.h>
 #include "player.h"
 #include <unistd.h>
-#include "minunit.h"
 #include <time.h>
+#include "minunit.h"
 
 //execution :
 //gcc -Wall -std=c11 -c -o config.o config.c
@@ -270,6 +270,7 @@ MU_TEST_SUITE(test_suite) {
 }
 
 int main(int argc, char *argv[]) {
+    srand(time(NULL));
 	MU_RUN_SUITE(test_suite);
     MU_REPORT();
 	return MU_EXIT_CODE;
