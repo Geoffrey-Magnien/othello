@@ -183,19 +183,33 @@ MU_TEST(validation_coup) {
 }
 
 MU_TEST(VictoryRate_Opt) {
-	mu_check(victory_percent(1) > 70);
+    int rate = victory_percent(1);
+    printf("\nopt(1) : %d \n",rate);
+	mu_check(rate > 99);
 }
+
 MU_TEST(VictoryRate_Corner) {
-	mu_check(victory_percent(2) > 70);
+    int rate = victory_percent(2);
+    printf("\ncorner(2) : %d \n",rate);
+	mu_check(rate > 99);
 }
+
 MU_TEST(VictoryRate_Minscore) {
-	mu_check(victory_percent(3) > 90);
+    int rate = victory_percent(3);
+    printf("\nMinscore(3) : %d \n",rate);
+	mu_check(rate > 99);
 }
+
 MU_TEST(VictoryRate_Surpuissant) {
-	mu_check(victory_percent(4) > 90);
+    int rate = victory_percent(4);
+    printf("\nSurpuissant(4) : %d \n",rate);
+	mu_check(rate > 99);
 }
+
 MU_TEST(VictoryRate_SurpuissantV2) {
-	mu_check(victory_percent(5) > 90);
+    int rate = victory_percent(5);
+    printf("\nsurpV2(5) : %d \n",rate);
+	mu_check(rate> 99);
 }
 
 MU_TEST(testOptVsMin) {
@@ -257,10 +271,5 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
 	MU_RUN_SUITE(test_suite);
 	MU_REPORT();
-    printf("\nopt(1) : %d \n",victory_percent(1));
-    printf("\ncorner(2) : %d \n",victory_percent(2));
-    printf("\nMinscore(3) : %d \n",victory_percent(3));
-    printf("\nSurpuissant(4) : %d \n",victory_percent(4));
-    printf("\nsurpV2(5) : %d \n",victory_percent(5));
 	return MU_EXIT_CODE;
 }
