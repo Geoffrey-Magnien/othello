@@ -147,7 +147,7 @@ int victory_percent(int robotType) {
     /* initialisation de la configuration du jeu */
     config_t game;
     status_t status;
-    for (int loop = 0; loop < 200; loop++){
+    for (int loop = 0; loop < 500; loop++){
         config_init(&game, 8);
         /* lancement du jeu*/
         status = othello_game_run(&game, playerB, playerW, robotType, 6);
@@ -186,31 +186,31 @@ MU_TEST(validation_coup) {
 MU_TEST(VictoryRate_Opt) {
     int rate = victory_percent(1);
 //    printf("\nopt(1) : %d \n",rate);
-	mu_check(rate > 99);
+	mu_check(rate > 60);
 }
 
 MU_TEST(VictoryRate_Corner) {
     int rate = victory_percent(2);
 //    printf("\ncorner(2) : %d \n",rate);
-	mu_check(rate > 99);
+	mu_check(rate > 50);
 }
 
 MU_TEST(VictoryRate_Minscore) {
     int rate = victory_percent(3);
 //    printf("\nMinscore(3) : %d \n",rate);
-	mu_check(rate > 99);
+	mu_check(rate > 70);
 }
 
 MU_TEST(VictoryRate_Surpuissant) {
     int rate = victory_percent(4);
 //    printf("\nSurpuissant(4) : %d \n",rate);
-	mu_check(rate > 99);
+	mu_check(rate > 70);
 }
 
 MU_TEST(VictoryRate_SurpuissantV2) {
     int rate = victory_percent(5);
 //    printf("\nsurpV2(5) : %d \n",rate);
-	mu_check(rate> 99);
+	mu_check(rate> 70);
 }
 
 MU_TEST(testOptVsMin) {
