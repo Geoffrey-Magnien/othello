@@ -147,7 +147,7 @@ int victory_percent(int robotType) {
     /* initialisation de la configuration du jeu */
     config_t game;
     status_t status;
-    for (int loop = 0; loop < 500; loop++){
+    for (int loop = 0; loop < 200; loop++){
         config_init(&game, 8);
         /* lancement du jeu*/
         status = othello_game_run(&game, playerB, playerW, robotType, 6);
