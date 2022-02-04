@@ -27,7 +27,7 @@ bool coup_valide = true;
 bool passe = false;
 bool fin_de_partie = false;
 bool erreur_fin_partie = false;
-int nombre_de_point_noir = 0;
+size_t nombre_de_point_noir = 0;
 
 //#####################################################################################################################
 //#
@@ -140,15 +140,15 @@ int othello_ending(config_t* game, status_t status) {
     }
 }
 
-int victory_percent(int robotType, int maxloop) {
-    int count = 0;
+size_t victory_percent(int robotType, size_t maxloop) {
+    size_t count = 0;
     player_t playerB = PLAYER_ROBOT;
     player_t playerW = PLAYER_ROBOT;
 
     /* initialisation de la configuration du jeu */
     config_t game;
     status_t status;
-    for (int loop = 0; loop < maxloop; loop++){
+    for (size_t loop = 0; loop < maxloop; loop++){
         config_init(&game, 8);
         status = othello_game_run(&game, playerB, playerW, robotType, 6);
 	    if((othello_ending(&game, status)) == 1){
@@ -187,38 +187,59 @@ MU_TEST(bot_rand_test) {
     player_t playerB = PLAYER_ROBOT;
     player_t playerW = PLAYER_ROBOT;
     config_t game;
-    int old_nombre_pts;
+    size_t old_nombre_pts = 0;
+    mu_check(nombre_de_point_noir>0);
     while (true){
-        othello_game_run(&game, playerB, playerW, 6, 6);
+        config_init(&game, 8);
+        othello_game_run(&game, playerB, playerW, 3, 6);
         old_nombre_pts = nombre_de_point_noir;
-        othello_game_run(&game, playerB, playerW, 6, 6);
+        config_init(&game, 8);
+        othello_game_run(&game, playerB, playerW, 3, 6);
         if (old_nombre_pts != nombre_de_point_noir){
             break;
         }
     }
-	mu_check(old_nombre_pts != nombre_de_point_noir);
 }
 
+/*
+MU_TEST(bot_rand_test) {
+    player_t playerB = PLAYER_ROBOT;
+    player_t playerW = PLAYER_ROBOT;
+    config_t game;
+    int old_nombre_pts;
+    //while (true){
+        othello_game_run(&game, playerB, playerW, 6, 6);
+        old_nombre_pts = nombre_de_point_noir;
+        othello_game_run(&game, playerB, playerW, 6, 6);
+        printf("\ngame old:%d, now :%d \n",old_nombre_pts,nombre_de_point_noir);
+        if (old_nombre_pts != nombre_de_point_noir){
+            printf("hihi");
+            //break;
+        }
+    //}
+	mu_check(old_nombre_pts != nombre_de_point_noir);
+}
+*/
 MU_TEST(VictoryRate_Opt) {
-    int rate = victory_percent(1,200);
+    size_t rate = victory_percent(1,200);
     printf("\nopt(1) : %d/100 victory; needed:55\n",rate);
 	mu_check(rate >= 55);
 }
 
 MU_TEST(VictoryRate_Corner) {
-    int rate = victory_percent(2,200);
+    size_t rate = victory_percent(2,200);
     printf("\ncorner(2) : %d/100 victory; needed:45\n",rate);
 	mu_check(rate >= 45);
 }
 
 MU_TEST(VictoryRate_Minscore) {
-    int rate = victory_percent(3,200);
+    size_t rate = victory_percent(3,200);
     printf("\nMinscore(3) : %d/100 victory; needed:85\n",rate);
 	mu_check(rate >= 85);
 }
 
 MU_TEST(VictoryRate_Surpuissant) {
-    int rate = victory_percent(4,200);
+    size_t rate = victory_percent(4,200);
     printf("\nSurpuissant(4) : %d/100 victory; needed:75\n",rate);
 	mu_check(rate >= 75);
 }
@@ -243,8 +264,8 @@ MU_TEST(VictoryRate_SurpuissanV2) {
 
     config_t game;
     status_t status;
-    int nb = 0;
-    for (int i = 0; i < 20; i++){
+    size_t nb = 0;
+    for (size_t i = 0; i < 20; i++){
         config_init(&game, 8);
         status = othello_game_run(&game, playerB, playerW, 5, 6);
 	    if( (othello_ending(&game, status)) == 1 ){
@@ -308,33 +329,43 @@ MU_TEST_SUITE(test_suite) {
     /* add the tests to the suite */
 
     //exigence 1
+    printf("\nExigence 1 : Fin partie");
     MU_RUN_TEST(fin_partie);
 
     //exigence 2
+    printf("\nExigence 2 : passe_tour");
     MU_RUN_TEST(passe_tour);
 
     //exigence 3
+    printf("\nExigence 3 : validation_coup");
     MU_RUN_TEST(validation_coup);
 
     //exigence 4
+    printf("\nExigence 4 : bot_rand_test.\n");
     MU_RUN_TEST(bot_rand_test);
 
     //exigence 5
+    printf("\nExigence 5 : VictoryRate_Opt:");
     MU_RUN_TEST(VictoryRate_Opt);
 
     //exigence 6
+    printf("\nExigence 6 : VictoryRate_Corner:");
     MU_RUN_TEST(VictoryRate_Corner);
     
     //exigence 7
+    printf("\nExigence 7 : VictoryRate_Minscore:");
     MU_RUN_TEST(VictoryRate_Minscore);
 
     //exigence 8
+    printf("\nExigence 8 : VictoryRate_Surpuissant:");
     MU_RUN_TEST(VictoryRate_Surpuissant);
 
     //exigence 9
+    printf("\nExigence 9 : VictoryRate_SurpuissanV2:");
     MU_RUN_TEST(VictoryRate_SurpuissanV2);
 
     //exigence 10
+    printf("\nExigence 10 : testOptVsMinscore\n");
     MU_RUN_TEST(testOptVsMinscore);
 }
 
