@@ -139,7 +139,7 @@ int othello_ending(config_t* game, status_t status) {
     }
 }
 
-int victory_percent(int robotType) {
+int victory_percent(int robotType, int maxloop) {
     int count = 0;
     player_t playerB = PLAYER_ROBOT;
     player_t playerW = PLAYER_ROBOT;
@@ -147,14 +147,14 @@ int victory_percent(int robotType) {
     /* initialisation de la configuration du jeu */
     config_t game;
     status_t status;
-    for (int loop = 0; loop < 500; loop++){
+    for (int loop = 0; loop < maxloop; loop++){
         config_init(&game, 8);
         status = othello_game_run(&game, playerB, playerW, robotType, 6);
 	    if((othello_ending(&game, status)) == 1){
             count += 1;
         }
     }
-    return(count/5);
+    return(100*count/maxloop);
 }
 
 //#####################################################################################################################
@@ -183,36 +183,61 @@ MU_TEST(validation_coup) {
 }
 
 MU_TEST(VictoryRate_Opt) {
-    int rate = victory_percent(1);
-    printf("\nopt(1) : %d \n",rate);
-	mu_check(rate > 50);
+    int rate = victory_percent(1,200);
+    printf("\nopt(1) : %d/100 victory\n",rate);
+	mu_check(rate > 55);
 }
 
 MU_TEST(VictoryRate_Corner) {
-    int rate = victory_percent(2);
-    printf("\ncorner(2) : %d \n",rate);
-	mu_check(rate > 50);
+    int rate = victory_percent(2,200);
+    printf("\ncorner(2) : %d/100 victory\n",rate);
+	mu_check(rate > 45);
 }
 
 MU_TEST(VictoryRate_Minscore) {
-    int rate = victory_percent(3);
-    printf("\nMinscore(3) : %d \n",rate);
-	mu_check(rate > 70);
+    int rate = victory_percent(3,200);
+    printf("\nMinscore(3) : %d/100 victory\n",rate);
+	mu_check(rate > 85);
 }
 
 MU_TEST(VictoryRate_Surpuissant) {
-    int rate = victory_percent(4);
-    printf("\nSurpuissant(4) : %d \n",rate);
-	mu_check(rate > 70);
+    int rate = victory_percent(4,200);
+    printf("\nSurpuissant(4) : %d/100 victory\n",rate);
+	mu_check(rate > 75);
 }
-
+/*
+MU_TEST(VictoryRate_Surpuissantbis) {
+    int rate = victory_percent(4);
+    printf("\nSurpuissantbis(4) : %d/100 victory\n",rate);
+	mu_check(rate > 75);
+}
+*/
 /*
 MU_TEST(VictoryRate_SurpuissanV2) {
-    int rate = victory_percent(5);
-//    printf("\n surpuissantV2(5) : %d \n",rate);
+    int rate = victory_percent(5,20);
+    printf("\nSurpuissantV2(5) : %d/100 victory\n",rate);
 	mu_check(rate> 70);
 }
 */
+
+MU_TEST(VictoryRate_SurpuissanV2) {
+    player_t playerB = PLAYER_ROBOT;
+    player_t playerW = PLAYER_ROBOT;
+
+    config_t game;
+    status_t status;
+    int nb = 0;
+    for (int i = 0; i < 20; i++){
+        config_init(&game, 8);
+        status = othello_game_run(&game, playerB, playerW, 5, 6);
+	    if( (othello_ending(&game, status)) == 1 ){
+            nb = nb + 1;
+        }
+    }
+    printf("\nSurpuissanV2(5) : %d/100 victory\n",nb*5);
+    mu_check(nb > 15);
+}
+
 
 MU_TEST(testOptVsMin) {
     /* les 2 joueurs sont des robots*/
@@ -262,10 +287,10 @@ MU_TEST_SUITE(test_suite) {
 
     //exigence 8
     MU_RUN_TEST(VictoryRate_Surpuissant);
-/*
+
     //exigence 9
     MU_RUN_TEST(VictoryRate_SurpuissanV2);
-*/
+
     //exigence 10
     MU_RUN_TEST(testOptVsMin);
 }

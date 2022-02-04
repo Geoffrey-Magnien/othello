@@ -9,3 +9,6 @@ othello.o
 player.o
 test_unit
 compile.bat
+test_minunit.exe
+test_minunit.o
+othello.exe

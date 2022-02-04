@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
     config_init(&game, size);
     /* lancement du jeu */
     srand(time(NULL));
-    status_t status = othello_game_run(&game, playerB, playerW, 3, 6);
+    status_t status = othello_game_run(&game, playerB, playerW, 5, 6);
 
     /* affichage fin */
     othello_end(&game, status);
