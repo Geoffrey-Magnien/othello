@@ -278,6 +278,7 @@ MU_TEST(testMinscoreVsSurpuissant) {
             victory_min += 1;
         }
     }
+    printf("\nVS %d\n",victory_min);
 	mu_check( victory_min > 3 );
 }
 
