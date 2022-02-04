@@ -27,7 +27,7 @@ bool coup_valide = true;
 bool passe = false;
 bool fin_de_partie = false;
 bool erreur_fin_partie = false;
-
+int nombre_de_point_noir = 0;
 
 //#####################################################################################################################
 //#
@@ -92,6 +92,7 @@ status_t othello_game_run(config_t* config,player_t playerB, player_t playerW, i
         }
         if(move_is_pass(&mW)==true && move_is_pass(&mB)==true){
             fin_de_partie = true;
+            nombre_de_point_noir = config->points_black;
             if (config->points_black>config->points_white){status=STATUS_BLACK;}
             else if(config->points_black<config->points_white){status=STATUS_WHITE;}
             else {status=STATUS_TIE;}
@@ -182,6 +183,22 @@ MU_TEST(validation_coup) {
 	mu_check(coup_valide);
 }
 
+MU_TEST(bot_rand_test) {
+    player_t playerB = PLAYER_ROBOT;
+    player_t playerW = PLAYER_ROBOT;
+    config_t game;
+    int old_nombre_pts;
+    while (true){
+        othello_game_run(&game, playerB, playerW, 6, 6);
+        old_nombre_pts = nombre_de_point_noir;
+        othello_game_run(&game, playerB, playerW, 6, 6);
+        if (old_nombre_pts != nombre_de_point_noir){
+            break;
+        }
+    }
+	mu_check(old_nombre_pts != nombre_de_point_noir);
+}
+
 MU_TEST(VictoryRate_Opt) {
     int rate = victory_percent(1,200);
     printf("\nopt(1) : %d/100 victory; needed:55\n",rate);
@@ -257,17 +274,15 @@ MU_TEST(testOptVsMinscore) {
 	mu_check( (othello_ending(&game, status)) == 1 );
 }
 
+/*
 MU_TEST(testMinscoreVsSurpuissant) {
-    /* les 2 joueurs sont des robots*/
     player_t playerB = PLAYER_ROBOT;
     player_t playerW = PLAYER_ROBOT;
 
-    /* initialisation de la configuration du jeu */
     config_t game;
     config_init(&game, 8);
     status_t status;
     int victory_min = 0;
-    /* lancement des 6 jeu*/
     for (int i = 0; i < 3; i++){
         status = othello_game_run(&game, playerB, playerW, 4, 3);
 	    if( (othello_ending(&game, status)) == 2 ){
@@ -281,7 +296,7 @@ MU_TEST(testMinscoreVsSurpuissant) {
     printf("\nVS %d\n",victory_min);
 	mu_check( victory_min > 3 );
 }
-
+*/
 
 //#####################################################################################################################
 //#
@@ -301,6 +316,9 @@ MU_TEST_SUITE(test_suite) {
     //exigence 3
     MU_RUN_TEST(validation_coup);
 
+    //exigence 4
+    MU_RUN_TEST(bot_rand_test);
+
     //exigence 5
     MU_RUN_TEST(VictoryRate_Opt);
 
@@ -318,9 +336,6 @@ MU_TEST_SUITE(test_suite) {
 
     //exigence 10
     MU_RUN_TEST(testOptVsMinscore);
-    
-    //exigence 11
-    MU_RUN_TEST(testMinscoreVsSurpuissant);
 }
 
 int main(int argc, char *argv[]) {
