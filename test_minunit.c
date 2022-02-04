@@ -234,12 +234,12 @@ MU_TEST(VictoryRate_SurpuissanV2) {
             nb = nb + 1;
         }
     }
-    printf("\nSurpuissanV2(5) : %d/100 victory; needed:85\n",nb*5);
-    mu_check(nb > 15);
+    printf("\nSurpuissanV2(5) : %d/100 victory; needed:70\n",nb*5);
+    mu_check(nb > 18);
 }
 
 
-MU_TEST(testOptVsMin) {
+MU_TEST(testOptVsMinscore) {
     /* les 2 joueurs sont des robots*/
     player_t playerB = PLAYER_ROBOT;
     player_t playerW = PLAYER_ROBOT;
@@ -254,6 +254,24 @@ MU_TEST(testOptVsMin) {
     config_init(&game, 8);
     /* lancement du jeu */
     status = othello_game_run(&game, playerB, playerW, 3, 1);
+	mu_check( (othello_ending(&game, status)) == 1 );
+}
+
+MU_TEST(testMinscoreVsSurpuissant) {
+    /* les 2 joueurs sont des robots*/
+    player_t playerB = PLAYER_ROBOT;
+    player_t playerW = PLAYER_ROBOT;
+
+    /* initialisation de la configuration du jeu */
+    config_t game;
+    config_init(&game, 8);
+    /* lancement du jeu*/
+    status_t status = othello_game_run(&game, playerB, playerW, 4, 3);
+	mu_check( (othello_ending(&game, status)) == 2 );
+
+    config_init(&game, 8);
+    /* lancement du jeu */
+    status = othello_game_run(&game, playerB, playerW, 3, 4);
 	mu_check( (othello_ending(&game, status)) == 1 );
 }
 
@@ -292,7 +310,10 @@ MU_TEST_SUITE(test_suite) {
     MU_RUN_TEST(VictoryRate_SurpuissanV2);
 
     //exigence 10
-    MU_RUN_TEST(testOptVsMin);
+    MU_RUN_TEST(testOptVsMinscore);
+    
+    //exigence 11
+    MU_RUN_TEST(testMinscoreVsSurpuissant);
 }
 
 int main(int argc, char *argv[]) {
