@@ -222,25 +222,25 @@ MU_TEST(bot_rand_test) {
 */
 MU_TEST(VictoryRate_Opt) {
     size_t rate = victory_percent(1,200);
-    printf("\nopt(1) : %d/100 victory; needed:55\n",rate);
+    printf("\n  %d/100 victory; needed:55\n",rate);
 	mu_check(rate >= 55);
 }
 
 MU_TEST(VictoryRate_Corner) {
     size_t rate = victory_percent(2,200);
-    printf("\ncorner(2) : %d/100 victory; needed:45\n",rate);
+    printf("\n  %d/100 victory; needed:45\n",rate);
 	mu_check(rate >= 45);
 }
 
 MU_TEST(VictoryRate_Minscore) {
     size_t rate = victory_percent(3,200);
-    printf("\nMinscore(3) : %d/100 victory; needed:85\n",rate);
+    printf("\n  %d/100 victory; needed:85\n",rate);
 	mu_check(rate >= 85);
 }
 
 MU_TEST(VictoryRate_Surpuissant) {
     size_t rate = victory_percent(4,200);
-    printf("\nSurpuissant(4) : %d/100 victory; needed:75\n",rate);
+    printf("\n  %d/100 victory; needed:75\n",rate);
 	mu_check(rate >= 75);
 }
 /*
@@ -272,7 +272,7 @@ MU_TEST(VictoryRate_SurpuissanV2) {
             nb = nb + 1;
         }
     }
-    printf("\nSurpuissanV2(5) : %d/100 victory; needed:80\n",nb*5);
+    printf("\n  %d/100 victory; needed:80\n",nb*5);
     mu_check(nb >= 16);
 }
 
