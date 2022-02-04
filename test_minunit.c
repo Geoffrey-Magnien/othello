@@ -184,25 +184,25 @@ MU_TEST(validation_coup) {
 
 MU_TEST(VictoryRate_Opt) {
     int rate = victory_percent(1,200);
-    printf("\nopt(1) : %d/100 victory\n",rate);
+    printf("\nopt(1) : %d/100 victory; needed:55\n",rate);
 	mu_check(rate > 55);
 }
 
 MU_TEST(VictoryRate_Corner) {
     int rate = victory_percent(2,200);
-    printf("\ncorner(2) : %d/100 victory\n",rate);
+    printf("\ncorner(2) : %d/100 victory; needed:45\n",rate);
 	mu_check(rate > 45);
 }
 
 MU_TEST(VictoryRate_Minscore) {
     int rate = victory_percent(3,200);
-    printf("\nMinscore(3) : %d/100 victory\n",rate);
+    printf("\nMinscore(3) : %d/100 victory; needed:85\n",rate);
 	mu_check(rate > 85);
 }
 
 MU_TEST(VictoryRate_Surpuissant) {
     int rate = victory_percent(4,200);
-    printf("\nSurpuissant(4) : %d/100 victory\n",rate);
+    printf("\nSurpuissant(4) : %d/100 victory; needed:75\n",rate);
 	mu_check(rate > 75);
 }
 /*
@@ -234,7 +234,7 @@ MU_TEST(VictoryRate_SurpuissanV2) {
             nb = nb + 1;
         }
     }
-    printf("\nSurpuissanV2(5) : %d/100 victory\n",nb*5);
+    printf("\nSurpuissanV2(5) : %d/100 victory; needed:85\n",nb*5);
     mu_check(nb > 15);
 }
 
