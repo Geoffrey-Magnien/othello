@@ -3127,9 +3127,9 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
 
         Bestnoeud = minmax(3,true,Arbre);
         //printf("\nBestnoeud : \n");
-        printf("%d\n",Bestnoeud->ligne);
-        printf("%d\n",Bestnoeud->colonne);
-        printf("%d\n",Bestnoeud->key);
+        //printf("%d\n",Bestnoeud->ligne);
+        //printf("%d\n",Bestnoeud->colonne);
+        //printf("%d\n",Bestnoeud->key);
         int k = Bestnoeud->key;
         int c = Bestnoeud->colonne;
         int l = Bestnoeud->ligne;
@@ -3143,7 +3143,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
         if (Bestnoeud){
         if (k == 0 && l == 0 && c == 0){
             result.kind = pass;
-            move_print(&result); 
+            //move_print(&result); 
             //clearTree(&value);
             //printf("sortie3\n");
             clearTree(&Arbre);
@@ -3154,7 +3154,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->un,k,c,l) == 1){
                 result.lin = Arbre->un->ligne;
                 result.col= Arbre->un->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3162,7 +3162,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->deux,k,c,l) == 1){
                 result.lin = Arbre->deux->ligne;
                 result.col= Arbre->deux->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3170,7 +3170,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->trois,k,c,l) == 1){
                 result.lin = Arbre->trois->ligne;
                 result.col= Arbre->trois->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3178,7 +3178,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->quatre,k,c,l) == 1){
                 result.lin = Arbre->quatre->ligne;
                 result.col= Arbre->quatre->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3186,7 +3186,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->cinq,k,c,l) == 1){
                 result.lin = Arbre->cinq->ligne;
                 result.col= Arbre->cinq->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3194,7 +3194,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->six,k,c,l) == 1){
                 result.lin = Arbre->six->ligne;
                 result.col= Arbre->six->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3202,7 +3202,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->sept,k,c,l) == 1){
                 result.lin = Arbre->sept->ligne;
                 result.col= Arbre->sept->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3210,7 +3210,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->huit,k,c,l) == 1){
                 result.lin = Arbre->huit->ligne;
                 result.col= Arbre->huit->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3218,7 +3218,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->neuf,k,c,l) == 1){
                 result.lin = Arbre->neuf->ligne;
                 result.col= Arbre->neuf->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3226,7 +3226,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->dix,k,c,l) == 1){
                 result.lin = Arbre->dix->ligne;
                 result.col= Arbre->dix->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3234,7 +3234,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->onze,k,c,l) == 1){
                 result.lin = Arbre->onze->ligne;
                 result.col= Arbre->onze->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3242,7 +3242,7 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->douze,k,c,l) == 1){
                 result.lin = Arbre->douze->ligne;
                 result.col= Arbre->douze->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
@@ -3250,19 +3250,19 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
             if (searchNode(Arbre->treize,k,c,l) == 1){
                 result.lin = Arbre->treize->ligne;
                 result.col= Arbre->treize->colonne;
-                move_print(&result);
+                //move_print(&result);
                 clearTree(&Arbre);
                 return result; 
             }
 
             result.kind = pass;
-            move_print(&result);
+            //move_print(&result);
             clearTree(&Arbre);
             return move_init(pass);
         } 
         } else {
             result.kind = pass;
-            move_print(&result);
+            //move_print(&result);
             //clearTree(&value);
             //printf("sortie3\n"); 
             clearTree(&Arbre);
