@@ -9,7 +9,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "player.h"
-//#include <time.h>
 
 /* Fonctions coups */
 
@@ -95,11 +94,6 @@ bool move_check_play(config_t* config,size_t lin, size_t col, cell_t c, int dLin
      */
     return false;
 }
-
-
-
-
-
 
 /**
  * Controle un coup PASS (MOVE_PASS_BLACK soit MOVE_PASS_WHITE) est correct
@@ -544,11 +538,11 @@ move_t play_robot_corner(config_t* game, move_kind_t m) {
 
 /**
  * Interface joueur robot
- * tactique: tente de se rapprocher le plus possible des coins
+ * tactique: Joue aléatoirement sur une case ou il est possible de jouer
  * @param config   situation du jeu
  * @param m        qui doit jouer
  * @return         le coup joue
- * ROBOT Numero 2
+ * ROBOT Numero 6
  */
 
 move_t play_robot_rand(config_t* game, move_kind_t m) {
@@ -1912,6 +1906,1399 @@ move_t play_robot_surpuissant_V2(config_t* game, move_kind_t m) {
 }
 
 
+typedef struct node
+{   
+    int ligne;
+    int colonne;
+    unsigned int key;
+    struct node *un;
+    struct node *deux;
+    struct node *trois;
+    struct node *quatre;
+    struct node *cinq;
+    struct node *six;
+    struct node *sept;
+    struct node *huit;
+    struct node *neuf;
+    struct node *dix;
+    struct node *onze;
+    struct node *douze;
+    struct node *treize;
+} node ;
+
+node *Arbre = NULL;
+//node *valeur = NULL;
+
+//print un arbre
+void printTree(node *tree)
+{
+    if(!tree) return;
+
+    if(tree->un)  printTree(tree->un);
+
+    printf("Cle = %d\n", tree->key);
+
+    if(tree->deux)  printTree(tree->deux);
+
+    if(tree->trois)  printTree(tree->trois);
+
+    if(tree->quatre)  printTree(tree->quatre);
+
+    if(tree->cinq)  printTree(tree->cinq);
+
+    if(tree->six)  printTree(tree->six);
+
+    if(tree->sept)  printTree(tree->sept);
+
+    if(tree->huit)  printTree(tree->huit);
+
+    if(tree->neuf)  printTree(tree->neuf);
+
+    if(tree->dix)  printTree(tree->dix);
+
+    if(tree->onze)  printTree(tree->onze);
+
+    if(tree->douze)  printTree(tree->douze);
+
+    if(tree->treize)  printTree(tree->treize);
+}
+
+//add un noeud à un arbre
+int addNode(node **tree, unsigned int key, int ligne, int colonne){
+    node *tmpTree = *tree;
+
+    node *elem = malloc(sizeof(node));
+    elem->ligne = ligne;
+    elem->colonne = colonne;
+    elem->key = key;
+    elem->un = NULL;
+    elem->deux = NULL;
+    elem->trois = NULL;
+    elem->quatre = NULL;
+    elem->cinq = NULL;
+    elem->six = NULL;
+    elem->sept = NULL;
+    elem->huit = NULL;
+    elem->neuf = NULL;
+    elem->dix = NULL;
+    elem->onze = NULL;
+    elem->douze = NULL;
+    elem->treize = NULL;
+
+    if(tmpTree){
+        if(tmpTree->treize){
+            return 100;
+        }
+
+        else if(tmpTree->douze){
+            tmpTree->treize = elem;
+            return 13;
+        }
+
+        else if(tmpTree->onze){
+            tmpTree->douze = elem;
+            return 12;
+        }
+
+        else if(tmpTree->dix){
+            tmpTree->onze = elem;
+            return 11;
+        }
+
+        else if(tmpTree->neuf){
+            tmpTree->dix = elem;
+            return 10;
+        }
+
+        else if(tmpTree->huit){
+            tmpTree->neuf = elem;
+            return 9;
+        }
+
+        else if(tmpTree->sept){
+            tmpTree->huit = elem;
+            return 8;
+        }
+
+        else if(tmpTree->six){
+            tmpTree->sept = elem;
+            return 7;
+        }
+
+        else if(tmpTree->cinq){
+            tmpTree->six = elem;
+            return 6;
+        }
+
+        else if(tmpTree->quatre){
+            tmpTree->cinq = elem;
+            return 5;
+        }
+
+        else if(tmpTree->trois){
+            tmpTree->quatre = elem;
+            return 4;
+        }
+
+        else if(tmpTree->deux){
+            tmpTree->trois = elem;
+            return 3;
+        }
+
+        else if(tmpTree->un){
+            tmpTree->deux = elem;
+            return 2;
+        }
+
+        else if(tmpTree){
+            tmpTree->un = elem;
+            return 1;
+        }
+    }
+    else { 
+        *tree = elem;
+        return 0;
+    } 
+    return 0;
+}
+
+//max entre deux noeud
+node* maximum(node* a, node *b){
+    int v = b->key;
+    int u = a->key;
+
+    if (b){
+        //printf("\nmaximum :\n");
+        //printf("%d\n",b->key);
+        //printf("%d\n",a->key);
+        //bool p = ((v) >= (u));
+        //printf("%d\n",p);
+
+        if(v >= u){
+            return b;
+        }
+        else{
+            return a;
+        }
+        
+    }
+    else
+    {
+        return a;
+    }
+    
+    
+}
+
+//min entre deux noeud
+node* minimum(node* a, node *b){
+    //printf("\nminimum :\n");
+    //printf("%d\n",b->key);
+    //printf("%d\n",a->key);
+    int v = b->key;
+    int u = a->key;
+
+    if (b){
+        if(v <= u){
+            return b;
+        }
+        else{
+            return a;
+        }
+    }
+    else
+    {
+        return a;
+    }
+}
+
+//algorithme minmax
+node* minmax(int depth,bool maximizingPlayer, node *noued){
+    
+    //printf("1\n");
+    if(depth == 0){
+        //printf("plllllssss\n");
+        return noued;
+    }
+
+    node* value = NULL;
+    
+
+    if(maximizingPlayer){
+        addNode(&value,-1000,0,0);
+        for (int i = 1; i <= 13; i++){
+            if(i == 1 && noued->un){
+                value = maximum(value,minmax(depth-1,false, noued->un));
+                //printf("2\n");
+            }
+            if(i == 2 && noued->deux){
+                value = maximum(value,minmax(depth-1,false, noued->deux));
+                //printf("2\n");
+            }
+            if(i == 3 && noued->trois){
+                value = maximum(value,minmax(depth-1,false, noued->trois));
+                //printf("2\n");
+            }
+            if(i == 4 && noued->quatre){
+                value = maximum(value,minmax(depth-1,false, noued->quatre));
+                //printf("2\n");
+            }
+            if(i == 5 && noued->cinq){
+                value = maximum(value,minmax(depth-1,false, noued->cinq));
+                //printf("2\n");
+            }
+            if(i == 6 && noued->six){
+                value = maximum(value,minmax(depth-1,false, noued->six));
+                //printf("2\n");
+            }
+            if(i == 7 && noued->sept){
+                value = maximum(value,minmax(depth-1,false, noued->sept));
+                //printf("2\n");
+            }
+            if(i == 8 && noued->huit){
+                value = maximum(value,minmax(depth-1,false, noued->huit));
+                //printf("2\n");
+            }
+            if(i == 9 && noued->neuf){
+                value = maximum(value,minmax(depth-1,false, noued->neuf));
+                //printf("2\n");
+            }
+            if(i == 10 && noued->dix){
+                value = maximum(value,minmax(depth-1,false, noued->dix));
+                //printf("2\n");
+            }
+            if(i == 11 && noued->onze){
+                value = maximum(value,minmax(depth-1,false, noued->onze));
+                //printf("2\n");
+            }
+            if(i == 12 && noued->douze){
+                value = maximum(value,minmax(depth-1,false, noued->douze));
+                //printf("2\n");
+            }
+            if(i == 13 && noued->treize){
+                value = maximum(value,minmax(depth-1,false, noued->treize));
+                //printf("2\n");
+            }
+        }
+    }
+    else{
+        addNode(&value,1000,0,0);
+        for (int i = 1; i <= 13; i++){
+            if(i == 1 && noued->un){
+                value = minimum(value,minmax(depth-1,true, noued->un));
+                //printf("3\n");
+            }
+            if(i == 2 && noued->deux){
+                value = minimum(value,minmax(depth-1,true, noued->deux));
+                //printf("3\n");
+            }
+            if(i == 3 && noued->trois){
+                value = minimum(value,minmax(depth-1,true, noued->trois));
+                //printf("3\n");
+            }
+            if(i == 4 && noued->quatre){
+                value = minimum(value,minmax(depth-1,true, noued->quatre));
+                //printf("3\n");
+            }
+            if(i == 5 && noued->cinq){
+                value = minimum(value,minmax(depth-1,true, noued->cinq));
+                //printf("3\n");
+            }
+            if(i == 6 && noued->six){
+                value = minimum(value,minmax(depth-1,true, noued->six));
+                //printf("3\n");
+            }
+            if(i == 7 && noued->sept){
+                value = minimum(value,minmax(depth-1,true, noued->sept));
+                //printf("3\n");
+            }
+            if(i == 8 && noued->huit){
+                value = minimum(value,minmax(depth-1,true, noued->huit));
+                //printf("3\n");
+            }
+            if(i == 9 && noued->neuf){
+                value = minimum(value,minmax(depth-1,true, noued->neuf));
+                //printf("3\n");
+            }
+            if(i == 10 && noued->dix){
+                value = minimum(value,minmax(depth-1,true, noued->dix));
+                //printf("3\n");
+            }
+            if(i == 11 && noued->onze){
+                value = minimum(value,minmax(depth-1,true, noued->onze));
+                //printf("3\n");
+            }
+            if(i == 12 && noued->douze){
+                value = minimum(value,minmax(depth-1,true, noued->douze));
+                //printf("3\n");
+            }
+            if(i == 13 && noued->treize){
+                value = minimum(value,minmax(depth-1,true, noued->treize));
+                //printf("3\n");
+            }
+        }
+    }
+    //printf("%d\n",value->key);
+    //printf("%d\n",value->ligne);
+    //printf("%d\n",value->colonne);
+    //valeur = value;
+    return value;
+}
+
+//evalue la valeur d un coup en fonction de nombreux paramètres
+unsigned int eval_score(config_t* game, move_kind_t m, int i, int j){
+    cell_t type = (m==MOVE_PLAY_BLACK) ? CELL_BLACK: CELL_WHITE;
+    size_t size = game->board_size;
+
+    
+    int score_cellule = 0;
+
+    //score fait par le coup
+    int score_case = 0;
+    for (int dC=-1; dC<=1; dC++){
+        for(int dL=-1; dL<=1; dL++){
+            if (!(dL==0 && dC==0)) {
+                score_case += point_par_coup(game,i,j,type,dL,dC);
+            }
+        }
+    }
+    score_cellule += score_case;
+    
+    if ( testCorner(i,j,size)) {
+        score_cellule +=500;
+    }
+
+    if(carre_pas_fou(game,i,j)){
+        score_cellule-=1000;
+    }
+
+    if(dernier_coup_de_la_ligne(game,i,j,m)){
+        score_cellule+=1000;
+    }
+
+    if(un_coin_colle(game,i,j,m)){
+        score_cellule+=500;
+    }
+    
+    if(un_adv_colle_a_un_groupe_nous(game,i,j,m)){
+        score_cellule+=200;
+    }
+
+    if(bord_est_vide(game,i,j,m)){
+        score_cellule+=300;
+    }
+
+    if(deja_un_groupe_adv_colle(game,i,j,m)){
+        score_cellule-=300;
+    }
+    
+    if(deja_un_groupe_adv_pas_colle(game,i,j,m)){
+        score_cellule-=300;
+    }
+    
+    if(encadrer_par_deux_pion_adv(game,i,j,m)){
+        score_cellule+=500;
+    }
+    
+    if(deja_un_groupe_nous_colle_danger(game,i,j,m)){
+        score_cellule-=300;
+    }
+
+    if(deja_un_groupe_nous_colle_cool(game,i,j,m)){
+        score_cellule+=300;
+    }
+    
+    if(deja_un_groupe_nous_pas_colle(game,i,j,m)){
+        score_cellule-=200;
+    }
+
+    if(plus_que_deux_cases(game,i,j,m)){
+        score_cellule-=100;
+    }
+    
+    if(Definitif(game,i,j,m)) {
+        score_cellule+=500;
+    }
+
+    if (case_interdite(i,j,size)){
+        score_cellule-=1000;
+    }
+
+    //calcul des libertés du coup
+    int score_liberte = 0;
+    for (int dC=-1; dC<=1; dC++){
+        for(int dL=-1; dL<=1; dL++){
+            if (!(dL==0 && dC==0)) {
+                cell_t cellule = board_get(game->board,size,i + dL,j + dC);
+                if ( cellule == CELL_FREE)
+                {
+                    score_liberte += 1;
+                }
+            }
+        }
+    }
+
+    score_cellule -= score_liberte;
+
+    return score_cellule;
+
+}
+
+//delete un arbre
+void clearTree(node **tree)
+{
+    node *tmpTree = *tree;
+
+    if(!tree) return;
+
+    if(tmpTree->un)  clearTree(&tmpTree->un);
+
+    if(tmpTree->deux) clearTree(&tmpTree->deux);
+
+    if(tmpTree->trois) clearTree(&tmpTree->trois);
+
+    if(tmpTree->quatre) clearTree(&tmpTree->quatre);
+
+    if(tmpTree->cinq) clearTree(&tmpTree->cinq);
+
+    if(tmpTree->six) clearTree(&tmpTree->six);
+
+    if(tmpTree->sept) clearTree(&tmpTree->sept);
+
+    if(tmpTree->huit) clearTree(&tmpTree->huit);
+
+    if(tmpTree->neuf) clearTree(&tmpTree->neuf);
+
+    if(tmpTree->dix) clearTree(&tmpTree->dix);
+
+    if(tmpTree->onze) clearTree(&tmpTree->onze);
+
+    if(tmpTree->douze) clearTree(&tmpTree->douze);
+
+    if(tmpTree->treize) clearTree(&tmpTree->treize);
+
+    free(tmpTree);      
+
+    *tree = NULL;
+}
+
+//fonction maximum classique
+int maxi(int a, int b){
+    if (a > b)
+    {   
+        return a;
+    }
+    else
+    {
+        return b;
+    }
+}
+
+//trouver un noeud dans l'arbre
+int searchNode(node *tree, int key, int colonne, int ligne)
+{
+    int value = 0;
+    if (tree){
+        int k = tree->key;
+        int l = tree->ligne;
+        int c = tree->colonne;
+
+        //printf("\narbre :\n");
+        //printf("%d\n",key);
+        //printf("%d\n",colonne);
+        //printf("%d\n",ligne);
+
+        //printf("\ntree :\n");
+        //printf("%d\n",k);
+        //printf("%d\n",c);
+        //printf("%d\n",l);
+
+        if(key == k && colonne == c && ligne == l) return 1;
+
+        if(tree->un) value = maxi(value, searchNode(tree->un,key,colonne,ligne));
+        if(tree->deux) value = maxi(value, searchNode(tree->deux,key,colonne,ligne));
+        if(tree->trois) value = maxi(value,searchNode(tree->trois,key,colonne,ligne));
+        if(tree->quatre) value = maxi(value,searchNode(tree->quatre,key,colonne,ligne));
+        if(tree->cinq) value = maxi(value,searchNode(tree->cinq,key,colonne,ligne));
+        if(tree->six) value = maxi(value,searchNode(tree->six,key,colonne,ligne));
+        if(tree->sept) value = maxi(value,searchNode(tree->sept,key,colonne,ligne));
+        if(tree->huit) value = maxi(value,searchNode(tree->huit,key,colonne,ligne));
+        if(tree->neuf) value = maxi(value,searchNode(tree->neuf,key,colonne,ligne));
+        if(tree->dix) value = maxi(value,searchNode(tree->dix,key,colonne,ligne));
+        if(tree->onze) value = maxi(value,searchNode(tree->onze,key,colonne,ligne));
+        if(tree->douze) value = maxi(value,searchNode(tree->douze,key,colonne,ligne));
+        if(tree->treize) value = maxi(value,searchNode(tree->treize,key,colonne,ligne));
+    }
+
+    return value;
+}
+
+//compte le nomre de cell_free
+int compte_cell_free(config_t* game,move_kind_t m){
+    int compte = 0;
+    size_t size = game->board_size;
+    for (int i = 0; i < size; i++){
+        for (int j=0; j<size; j++) {
+            cell_t jeton = board_get(game->board,size,i,j);
+            if (jeton == CELL_FREE)
+            {
+                compte+=1;
+            }
+            
+        }
+    }
+    return compte;
+    
+}
+
+//robot trop nul 
+//Robot 7
+move_t play_robot_minmax(config_t* game, move_kind_t m){    
+    //printf("1\n");
+    move_t result = move_init(m);
+    move_kind_t pass = (m == MOVE_PLAY_BLACK) ? MOVE_PASS_BLACK : MOVE_PASS_WHITE;
+    size_t size = game->board_size;
+    if (compte_cell_free(game,m) > 2){
+    
+        config_t* copy1 = config_copy(game);
+        mettre_les_suggestions(copy1,m);
+
+        //printf("2a\n");
+        addNode(&Arbre, 0, 0,0);
+        //printf("3a\n");
+        //ajout des coups possiles à l'arbre sur 3 de pronfondeurs
+        for (int i=0; i<size; i++) {
+        for (int j=0; j<size; j++) {
+            //printf("4\n");
+            cell_t jeton = board_get(copy1->board,size,i,j);
+            //printf("5\n");
+            if (jeton==CELL_SUG) {
+                //printf("6\n");
+                int num = addNode(&Arbre, 0, i,j);
+                //printf("7\n");
+                config_t* copy2 = config_copy(game);
+                move_t move;
+                move.kind=m;
+                move.lin=i;
+                move.col=j;
+                move_do(copy2,&move);
+
+                move_kind_t m2 = (m == MOVE_PLAY_BLACK) ? MOVE_PLAY_WHITE : MOVE_PLAY_BLACK;
+
+                //printf("8\n");
+
+                config_t* copy3 = config_copy(copy2);
+                mettre_les_suggestions(copy3,m2);
+                //board_print(copy3->board,size);
+                int num2;
+
+                for (int k=0; k<size; k++) {
+                    for (int l=0; l<size; l++) {
+                        cell_t jeton2 = board_get(copy3->board,size,k,l);
+                        
+
+                        if (jeton2 == CELL_SUG) {
+                            //printf("9\n");
+                            if (num == 1){
+                                num2 = addNode(&Arbre->un, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 2){
+                                num2 = addNode(&Arbre->deux, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 3){
+                                num2 = addNode(&Arbre->trois, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 4){
+                                num2 = addNode(&Arbre->quatre, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 5){
+                                num2 = addNode(&Arbre->cinq, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 6){
+                                num2 = addNode(&Arbre->six, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 7){
+                                num2 = addNode(&Arbre->sept, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 8){
+                                num2 = addNode(&Arbre->huit, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 9){
+                                num2 = addNode(&Arbre->neuf, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 10){
+                                num2 = addNode(&Arbre->dix, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 11){
+                                num2 = addNode(&Arbre->onze, 0, k,l);
+                                //printf("10\n");
+                            }
+                            if (num == 12){
+                                num2 = addNode(&Arbre->douze, 0, k,l);
+                                //printf("10\n");
+                            }
+                             if (num == 13){
+                                num2 = addNode(&Arbre->treize, 0, k,l);
+                                //printf("10\n");
+                            }
+                        
+
+                            config_t* copy4 = config_copy(copy2);
+                            move_t move2;
+                            move2.kind=m2;
+                            move2.lin=k;
+                            move2.col=l;
+                            move_do(copy4,&move2);
+
+                            config_t* copy5 = config_copy(copy4);
+                            mettre_les_suggestions(copy5,m);
+                            //board_print(copy5->board,size);
+                            for (int v=0; v<size; v++) {
+                                for (int u=0; u<size; u++) {
+                                    
+                                    cell_t jeton3 =board_get(copy5->board,size,v,u);
+
+                                    if (jeton3==CELL_SUG) {
+                                        //arbre->un
+                                        if (num == 1 && num2 == 1){
+                                            addNode(&Arbre->un->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 2){
+                                            addNode(&Arbre->un->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 3){
+                                            addNode(&Arbre->un->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 4){
+                                            addNode(&Arbre->un->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 5){
+                                            addNode(&Arbre->un->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 6){
+                                            addNode(&Arbre->un->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 7){
+                                            addNode(&Arbre->un->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 8){
+                                            addNode(&Arbre->un->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 9){
+                                            addNode(&Arbre->un->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 10){
+                                            addNode(&Arbre->un->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 11){
+                                            addNode(&Arbre->un->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 12){
+                                            addNode(&Arbre->un->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 1 && num2 == 13){
+                                            addNode(&Arbre->un->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->deux
+                                        if (num == 2 && num2 == 1){
+                                            addNode(&Arbre->deux->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 2){
+                                            addNode(&Arbre->deux->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 3){
+                                            addNode(&Arbre->deux->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 4){
+                                            addNode(&Arbre->deux->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 5){
+                                            addNode(&Arbre->deux->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 6){
+                                            addNode(&Arbre->deux->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 7){
+                                            addNode(&Arbre->deux->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 8){
+                                            addNode(&Arbre->deux->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 9){
+                                            addNode(&Arbre->deux->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 10){
+                                            addNode(&Arbre->deux->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 11){
+                                            addNode(&Arbre->deux->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 12){
+                                            addNode(&Arbre->deux->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 2 && num2 == 13){
+                                            addNode(&Arbre->deux->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->trois
+                                        if (num == 3 && num2 == 1){
+                                            addNode(&Arbre->trois->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 2){
+                                            addNode(&Arbre->trois->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 3){
+                                            addNode(&Arbre->trois->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 4){
+                                            addNode(&Arbre->trois->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 5){
+                                            addNode(&Arbre->trois->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 6){
+                                            addNode(&Arbre->trois->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 7){
+                                            addNode(&Arbre->trois->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 8){
+                                            addNode(&Arbre->trois->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 9){
+                                            addNode(&Arbre->trois->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 10){
+                                            addNode(&Arbre->trois->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 11){
+                                            addNode(&Arbre->trois->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 12){
+                                            addNode(&Arbre->trois->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 3 && num2 == 13){
+                                            addNode(&Arbre->trois->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->quatre
+                                        if (num == 4 && num2 == 1){
+                                            addNode(&Arbre->quatre->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 2){
+                                            addNode(&Arbre->quatre->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 3){
+                                            addNode(&Arbre->quatre->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 4){
+                                            addNode(&Arbre->quatre->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 5){
+                                            addNode(&Arbre->quatre->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 6){
+                                            addNode(&Arbre->quatre->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 7){
+                                            addNode(&Arbre->quatre->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 8){
+                                            addNode(&Arbre->quatre->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 9){
+                                            addNode(&Arbre->quatre->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 10){
+                                            addNode(&Arbre->quatre->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 11){
+                                            addNode(&Arbre->quatre->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 12){
+                                            addNode(&Arbre->quatre->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 4 && num2 == 13){
+                                            addNode(&Arbre->quatre->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->cinq
+                                        if (num == 5 && num2 == 1){
+                                            addNode(&Arbre->cinq->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 2){
+                                            addNode(&Arbre->cinq->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 3){
+                                            addNode(&Arbre->cinq->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 4){
+                                            addNode(&Arbre->cinq->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 5){
+                                            addNode(&Arbre->cinq->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 6){
+                                            addNode(&Arbre->cinq->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 7){
+                                            addNode(&Arbre->cinq->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 8){
+                                            addNode(&Arbre->cinq->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 9){
+                                            addNode(&Arbre->cinq->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 10){
+                                            addNode(&Arbre->cinq->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 11){
+                                            addNode(&Arbre->cinq->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 12){
+                                            addNode(&Arbre->cinq->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 5 && num2 == 13){
+                                            addNode(&Arbre->cinq->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->six
+                                        if (num == 6 && num2 == 1){
+                                            addNode(&Arbre->six->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 2){
+                                            addNode(&Arbre->six->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 3){
+                                            addNode(&Arbre->six->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 4){
+                                            addNode(&Arbre->six->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 5){
+                                            addNode(&Arbre->six->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 6){
+                                            addNode(&Arbre->six->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 7){
+                                            addNode(&Arbre->six->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 8){
+                                            addNode(&Arbre->six->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 9){
+                                            addNode(&Arbre->six->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 10){
+                                            addNode(&Arbre->six->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 11){
+                                            addNode(&Arbre->six->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 12){
+                                            addNode(&Arbre->six->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 6 && num2 == 13){
+                                            addNode(&Arbre->six->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->sept
+                                        if (num == 7 && num2 == 1){
+                                            addNode(&Arbre->sept->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 2){
+                                            addNode(&Arbre->sept->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 3){
+                                            addNode(&Arbre->sept->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 4){
+                                            addNode(&Arbre->sept->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 5){
+                                            addNode(&Arbre->sept->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 6){
+                                            addNode(&Arbre->sept->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 7){
+                                            addNode(&Arbre->sept->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 8){
+                                            addNode(&Arbre->sept->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 9){
+                                            addNode(&Arbre->sept->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 10){
+                                            addNode(&Arbre->sept->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 11){
+                                            addNode(&Arbre->sept->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 12){
+                                            addNode(&Arbre->sept->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 7 && num2 == 13){
+                                            addNode(&Arbre->sept->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        
+                                        //arbre->huit
+                                        if (num == 8 && num2 == 1){
+                                            addNode(&Arbre->huit->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 2){
+                                            addNode(&Arbre->huit->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 3){
+                                            addNode(&Arbre->huit->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 4){
+                                            addNode(&Arbre->huit->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 5){
+                                            addNode(&Arbre->huit->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 6){
+                                            addNode(&Arbre->huit->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 7){
+                                            addNode(&Arbre->huit->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 8){
+                                            addNode(&Arbre->huit->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 9){
+                                            addNode(&Arbre->huit->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 10){
+                                            addNode(&Arbre->huit->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 11){
+                                            addNode(&Arbre->huit->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 12){
+                                            addNode(&Arbre->huit->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 8 && num2 == 13){
+                                            addNode(&Arbre->huit->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->neuf
+                                        if (num == 9 && num2 == 1){
+                                            addNode(&Arbre->neuf->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 2){
+                                            addNode(&Arbre->neuf->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 3){
+                                            addNode(&Arbre->neuf->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 4){
+                                            addNode(&Arbre->neuf->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 5){
+                                            addNode(&Arbre->neuf->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 6){
+                                            addNode(&Arbre->neuf->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 7){
+                                            addNode(&Arbre->neuf->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 8){
+                                            addNode(&Arbre->neuf->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 9){
+                                            addNode(&Arbre->neuf->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 10){
+                                            addNode(&Arbre->neuf->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 11){
+                                            addNode(&Arbre->neuf->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 12){
+                                            addNode(&Arbre->neuf->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 9 && num2 == 13){
+                                            addNode(&Arbre->neuf->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->dix
+                                        if (num == 10 && num2 == 1){
+                                            addNode(&Arbre->dix->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 2){
+                                            addNode(&Arbre->dix->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 3){
+                                            addNode(&Arbre->dix->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 4){
+                                            addNode(&Arbre->dix->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 5){
+                                            addNode(&Arbre->dix->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 6){
+                                            addNode(&Arbre->dix->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 7){
+                                            addNode(&Arbre->dix->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 8){
+                                            addNode(&Arbre->dix->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 9){
+                                            addNode(&Arbre->dix->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 10){
+                                            addNode(&Arbre->dix->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 11){
+                                            addNode(&Arbre->dix->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 12){
+                                            addNode(&Arbre->dix->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 10 && num2 == 13){
+                                            addNode(&Arbre->dix->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->onze
+                                        if (num == 11 && num2 == 1){
+                                            addNode(&Arbre->onze->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 2){
+                                            addNode(&Arbre->onze->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 3){
+                                            addNode(&Arbre->onze->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 4){
+                                            addNode(&Arbre->onze->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 5){
+                                            addNode(&Arbre->onze->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 6){
+                                            addNode(&Arbre->onze->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 7){
+                                            addNode(&Arbre->onze->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 8){
+                                            addNode(&Arbre->onze->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 9){
+                                            addNode(&Arbre->onze->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 10){
+                                            addNode(&Arbre->onze->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 11){
+                                            addNode(&Arbre->onze->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 12){
+                                            addNode(&Arbre->onze->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 11 && num2 == 13){
+                                            addNode(&Arbre->onze->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->douze
+                                        if (num == 12 && num2 == 1){
+                                            addNode(&Arbre->douze->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 2){
+                                            addNode(&Arbre->douze->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 3){
+                                            addNode(&Arbre->douze->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 4){
+                                            addNode(&Arbre->douze->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 5){
+                                            addNode(&Arbre->douze->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 6){
+                                            addNode(&Arbre->douze->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 7){
+                                            addNode(&Arbre->douze->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 8){
+                                            addNode(&Arbre->douze->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 9){
+                                            addNode(&Arbre->douze->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 10){
+                                            addNode(&Arbre->douze->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 11){
+                                            addNode(&Arbre->douze->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 12){
+                                            addNode(&Arbre->douze->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 12 && num2 == 13){
+                                            addNode(&Arbre->douze->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+
+                                        //arbre->treize
+                                        if (num == 13 && num2 == 1){
+                                            addNode(&Arbre->treize->un, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 2){
+                                            addNode(&Arbre->treize->deux, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 3){
+                                            addNode(&Arbre->treize->trois, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 4){
+                                            addNode(&Arbre->treize->quatre, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 5){
+                                            addNode(&Arbre->treize->cinq, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 6){
+                                            addNode(&Arbre->treize->six, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 7){
+                                            addNode(&Arbre->treize->sept, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 8){
+                                            addNode(&Arbre->treize->huit, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 9){
+                                            addNode(&Arbre->treize->neuf, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 10){
+                                            addNode(&Arbre->treize->dix, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 11){
+                                            addNode(&Arbre->treize->onze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 12){
+                                            addNode(&Arbre->treize->douze, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                        if (num == 13 && num2 == 13){
+                                            addNode(&Arbre->treize->treize, eval_score(copy4, m, v,u), v,u);
+                                        }
+                                    }
+                                }
+                            }
+                            config_free(copy5); 
+                            config_free(copy4);          
+                        }
+                    }
+                }
+                config_free(copy2);
+                config_free(copy3);
+            }
+        }
+    }
+        config_free(copy1);
+        //printf("sortie1\n");
+    
+    
+        //printTree(Arbre);
+
+        //recherche du meilleur coup dans l'arbre
+        //algorithme minmax
+
+        node* Bestnoeud = malloc(sizeof(node));
+
+        Bestnoeud = minmax(3,true,Arbre);
+        //printf("\nBestnoeud : \n");
+        printf("%d\n",Bestnoeud->ligne);
+        printf("%d\n",Bestnoeud->colonne);
+        printf("%d\n",Bestnoeud->key);
+        int k = Bestnoeud->key;
+        int c = Bestnoeud->colonne;
+        int l = Bestnoeud->ligne;
+
+        if (k == 1000 || k == -1000){
+            return play_robot_surpuissant_V2(game,m);
+        }
+        
+        //printf("sortie2\n");
+
+        if (Bestnoeud){
+        if (k == 0 && l == 0 && c == 0){
+            result.kind = pass;
+            move_print(&result); 
+            //clearTree(&value);
+            //printf("sortie3\n");
+            clearTree(&Arbre);
+            return move_init(pass);
+        }
+        else
+        {   
+            if (searchNode(Arbre->un,k,c,l) == 1){
+                result.lin = Arbre->un->ligne;
+                result.col= Arbre->un->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->deux,k,c,l) == 1){
+                result.lin = Arbre->deux->ligne;
+                result.col= Arbre->deux->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+            
+            if (searchNode(Arbre->trois,k,c,l) == 1){
+                result.lin = Arbre->trois->ligne;
+                result.col= Arbre->trois->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->quatre,k,c,l) == 1){
+                result.lin = Arbre->quatre->ligne;
+                result.col= Arbre->quatre->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->cinq,k,c,l) == 1){
+                result.lin = Arbre->cinq->ligne;
+                result.col= Arbre->cinq->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->six,k,c,l) == 1){
+                result.lin = Arbre->six->ligne;
+                result.col= Arbre->six->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->sept,k,c,l) == 1){
+                result.lin = Arbre->sept->ligne;
+                result.col= Arbre->sept->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->huit,k,c,l) == 1){
+                result.lin = Arbre->huit->ligne;
+                result.col= Arbre->huit->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->neuf,k,c,l) == 1){
+                result.lin = Arbre->neuf->ligne;
+                result.col= Arbre->neuf->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->dix,k,c,l) == 1){
+                result.lin = Arbre->dix->ligne;
+                result.col= Arbre->dix->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->onze,k,c,l) == 1){
+                result.lin = Arbre->onze->ligne;
+                result.col= Arbre->onze->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->douze,k,c,l) == 1){
+                result.lin = Arbre->douze->ligne;
+                result.col= Arbre->douze->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            if (searchNode(Arbre->treize,k,c,l) == 1){
+                result.lin = Arbre->treize->ligne;
+                result.col= Arbre->treize->colonne;
+                move_print(&result);
+                clearTree(&Arbre);
+                return result; 
+            }
+
+            result.kind = pass;
+            move_print(&result);
+            clearTree(&Arbre);
+            return move_init(pass);
+        } 
+        } else {
+            result.kind = pass;
+            move_print(&result);
+            //clearTree(&value);
+            //printf("sortie3\n"); 
+            clearTree(&Arbre);
+            return move_init(pass);
+        }
+    }
+    else
+    {
+        return play_robot_minScoreAdverse(game,m);
+    }
+    
+} 
+
+/*
+Faire les coups possibles et les evaluer
+Ensuite créer un autre plateau et faire un coup puis calculer les coups suivant et les mettres dasn l'arbre
+Ensuite recommencer une autre fois
+
+Une fois l'arbre de coup possible obtenu, faire un algorithme minmax pour calculer le meilleur coup -> 
+    le joueur 1 choisi la haute evaluation
+    le joueur 2 choisi la plus petite
+    le joueur 2 choisi la plus haute
+
+
+ensuite rechercher dans l arbre le coup otenu pour recup le coup à jouer
+
+L'évaluation : - le nombre de pion 
+               - ( le nombre de liberté si j ai la fois)
+               - sa place sur le plateau ( coin / bord / carré de neuf / reste)
+
+delete l'arbre à la fin
+*/
+
+
+
+
 
 /**
  * Interface pour le joueur Noir
@@ -1948,6 +3335,10 @@ move_t play_black(config_t* game, player_t pB, int numero) {
         case 6:
         {
             return play_robot_rand(game, MOVE_PLAY_BLACK);
+        }
+        case 7:
+        {
+            return play_robot_minmax(game, MOVE_PLAY_BLACK);
         }
         default:
             return play_robot_opt(game, MOVE_PLAY_BLACK);
@@ -1990,6 +3381,10 @@ move_t play_white(config_t* game, player_t pW, int numero) {
         case 6:
         {
             return play_robot_rand(game, MOVE_PLAY_WHITE);
+        }
+        case 7:
+        {
+            return play_robot_minmax(game, MOVE_PLAY_WHITE);
         }
         default:
             return play_robot_opt(game, MOVE_PLAY_WHITE);

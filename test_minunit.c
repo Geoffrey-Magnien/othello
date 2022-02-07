@@ -243,6 +243,12 @@ MU_TEST(VictoryRate_Surpuissant) {
     printf("\n  %d/100 victory; needed:75\n",rate);
 	mu_check(rate >= 75);
 }
+
+MU_TEST(VictoryRate_Minmax) {
+    size_t rate = victory_percent(7,200);
+    printf("\n  %d/100 victory; needed:75\n",rate);
+	mu_check(rate >= 50);
+}
 /*
 MU_TEST(VictoryRate_Surpuissantbis) {
     int rate = victory_percent(4);
@@ -367,6 +373,9 @@ MU_TEST_SUITE(test_suite) {
     //exigence 10
     printf("\nExigence 10 : testOptVsMinscore\n");
     MU_RUN_TEST(testOptVsMinscore);
+
+    printf("\nExigence 10 : VictoryRate_Minmax\n");
+    MU_RUN_TEST(VictoryRate_Minmax);
 }
 
 int main(int argc, char *argv[]) {
