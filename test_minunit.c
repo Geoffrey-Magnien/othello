@@ -371,12 +371,12 @@ MU_TEST_SUITE(test_suite) {
     MU_RUN_TEST(VictoryRate_SurpuissanV2);
 
     //exigence 10
-    printf("\nExigence 10 : VictoryRate_Minmax");
-    MU_RUN_TEST(VictoryRate_Minmax);
-
-    //exigence 11
     printf("\nExigence 11 : testOptVsMinscore\n");
     MU_RUN_TEST(testOptVsMinscore);
+
+    //exigence 11
+    printf("\nExigence 10 : VictoryRate_Minmax");
+    MU_RUN_TEST(VictoryRate_Minmax);
 }
 
 int main(int argc, char *argv[]) {
