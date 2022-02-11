@@ -245,9 +245,9 @@ MU_TEST(VictoryRate_Surpuissant) {
 }
 
 MU_TEST(VictoryRate_Minmax) {
-    size_t rate = victory_percent(7,40);
-    printf("\n  %d/100 victory; needed:70\n",rate);
-	mu_check(rate >= 70);
+    size_t rate = victory_percent(7,80);
+    printf("\n  %d/100 victory; needed:80\n",rate);
+	mu_check(rate >= 80);
 }
 /*
 MU_TEST(VictoryRate_Surpuissantbis) {

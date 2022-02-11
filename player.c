@@ -3135,8 +3135,6 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
         int l = Bestnoeud->ligne;
 
         if (k == 1000 || k == -1000){
-            addNode(&Arbre, 0, 0,0);
-            clearTree(&Arbre);
             return play_robot_surpuissant_V2(game,m);
         }
         
@@ -3273,8 +3271,6 @@ move_t play_robot_minmax(config_t* game, move_kind_t m){
     }
     else
     {
-        addNode(&Arbre, 0, 0,0);
-        clearTree(&Arbre);
         return play_robot_minScoreAdverse(game,m);
     }
     
