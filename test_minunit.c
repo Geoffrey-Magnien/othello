@@ -278,8 +278,8 @@ MU_TEST(VictoryRate_SurpuissanV2) {
             nb = nb + 1;
         }
     }
-    printf("\n  %d/100 victory; needed:80\n",nb*5);
-    mu_check(nb >= 16);
+    printf("\n  %d/100 victory; needed:75\n",nb*5);
+    mu_check(nb >= 15);
 }
 
 
